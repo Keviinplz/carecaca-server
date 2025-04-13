@@ -1,6 +1,6 @@
-import type { GameUIObject, Point } from "@/models/base";
+import type { DrawingContext, GameUIObject, Point } from "@/models/base";
 import { CardUI } from "./card";
-
+import { radiansToDegrees } from "@/utils";
 type PlayerUIProps = {
     name: string;
     isMyself: boolean
@@ -36,45 +36,77 @@ export class PlayerUI implements GameUIObject {
         this.tablePosition = tablePosition
     }
 
-    private drawName(ctx: CanvasRenderingContext2D): void {
+    private drawName(drawingCtx: DrawingContext): void {
+        const {ctx} = drawingCtx;
         ctx.fillText(this.name, this.tablePosition.x - 12, this.tablePosition.y - 40);
     }
 
-    private drawHandCards(ctx: CanvasRenderingContext2D): void {
+    private drawHandCards(drawingCtx: DrawingContext): void {
+        const {ctx} = drawingCtx;
+        const origin = {x: ctx.canvas.width / 2, y: ctx.canvas.height / 2}
+        const radius = Math.sqrt((origin.x - this.tablePosition.x)**2 + (this.tablePosition.y - origin.y)**2);
+        const rotationAngle = (Math.PI / 2) - Math.atan(((this.tablePosition.y - origin.y) / (origin.x - this.tablePosition.x)))
+        
+        console.debug({
+            player: this.name, 
+            origin, 
+            playerPosition: this.tablePosition, 
+            triangle: {
+                a: this.tablePosition.y - origin.y,
+                b: origin.x - this.tablePosition.x,
+                h: radius
+            }, 
+            angle: radiansToDegrees(rotationAngle)
+        })
+        ctx.save()
+        ctx.translate(origin.x, origin.y)
         for (const [index, card] of this.hand.entries()) {
             let cardPosition: Point;
             const k = index + ((1 - this.hand.length) / 2);
-            cardPosition = {x: this.tablePosition.x + (k* this.handCardMargin), y: this.tablePosition.y}
+            cardPosition = {
+                x: this.tablePosition.x + (k* this.handCardMargin), 
+                y: this.tablePosition.y
+            }
+            cardPosition.x = origin.x - cardPosition.x;
+            cardPosition.y = cardPosition.y - origin.y;
             card.setPosition(cardPosition)
-            card.draw(ctx)
+            ctx.save()
+            ctx.translate(cardPosition.x, cardPosition.y)
+            ctx.rotate(rotationAngle)
+            ctx.translate(-cardPosition.x, -cardPosition.y)
+            card.draw(drawingCtx)
+            ctx.restore()
         }
+        ctx.restore()
     }
 
-    private drawFaceUpCards(ctx: CanvasRenderingContext2D): void {
+    private drawFaceUpCards(drawingCtx: DrawingContext): void {
+        const {ctx} = drawingCtx;
         for (const [index, card] of this.faceUpCards.entries()) {
             let cardPosition: Point;
             const k = index + ((1 - this.faceUpCards.length) / 2);
             cardPosition = {x: this.tablePosition.x + (k* this.handCardMargin), y: this.tablePosition.y + 80}
             card.setPosition(cardPosition)
-            card.draw(ctx)
+            card.draw(drawingCtx)
         }
     }
 
-    private drawFaceDownCards(ctx: CanvasRenderingContext2D): void {
+    private drawFaceDownCards(drawingCtx: DrawingContext): void {
+        const {ctx} = drawingCtx;
         for (const [index, card] of this.faceDownCards.entries()) {
             let cardPosition: Point;
             const k = index + ((1 - this.faceDownCards.length) / 2);
             cardPosition = {x: this.tablePosition.x + (k* this.handCardMargin), y: this.tablePosition.y + 100}
             card.setPosition(cardPosition)
             card.setHidden(true)
-            card.draw(ctx)
+            card.draw(drawingCtx)
         }
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
-        this.drawName(ctx)
-        this.drawHandCards(ctx)
-        this.drawFaceDownCards(ctx)
-        this.drawFaceUpCards(ctx)
+    draw(drawingCtx: DrawingContext): void {
+        this.drawName(drawingCtx)
+        this.drawHandCards(drawingCtx)
+        // this.drawFaceUpCards(drawingCtx)
+        // this.drawFaceDownCards(drawingCtx)
     }
 }

@@ -20,7 +20,7 @@ export function spawnDeck(): Card[] {
             if (value === "Down") {
                 continue
             }
-            cards.push({value, suit})
+            cards.push({ value, suit })
         }
     }
 
@@ -54,9 +54,12 @@ export class GameStateFactory {
                 tablePosition: { x: 0, y: 0 }
             })
         })
+        const upperCard = deck.pop()!
 
         return {
-            players
+            players,
+            discardPile: [new CardUI({ value: upperCard.value, suit: upperCard.suit, tablePosition: { x: 0, y: 0 } })],
+            drawDeck: deck.map((card) => new CardUI({ value: card.value, suit: card.suit, tablePosition: { x: 0, y: 0 } }))
         }
     }
 }

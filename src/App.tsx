@@ -2,14 +2,14 @@ import { useReducer } from "react";
 import { CanvasBoard } from "@/CanvasBoard";
 import gameStateReducer from "@/gameStateReducer";
 import { GameStateFactory, spawnDeck } from "@/factory/game";
-import { shuffle } from "@/utils";
+import { shuffle } from "@/utils"
 
 const deck = shuffle(spawnDeck())
 const factory = new GameStateFactory()
 factory.addPlayer({name: "Kevin", isMyself: true})
 factory.addPlayer({name: "CPU1", isMyself: false})
-factory.addPlayer({name: "CPU2", isMyself: false})
-factory.addPlayer({name: "CPU3", isMyself: false})
+// factory.addPlayer({name: "CPU2", isMyself: false})
+// factory.addPlayer({name: "CPU3", isMyself: false})
 const initialGameState = factory.createGame(deck)
 
 function App() {
@@ -37,7 +37,6 @@ function App() {
           </form>
         </div>
       </main>
-
       <footer>With ❤️ by Keviinplz</footer>
     </>
   )

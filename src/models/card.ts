@@ -1,6 +1,5 @@
 import { CARD_SUITS, CARD_VALUES, CardSuit, CardValue } from "@/engine/constants";
-import type { GameUIObject, Point } from "./base";
-import cardSprite from '@/assets/cards.png';
+import type { DrawingContext, GameUIObject, Point } from "./base";
 
 type CardUIProps = {
     value: CardValue
@@ -23,6 +22,13 @@ export class CardUI implements GameUIObject {
         this.hidden = false
     }
 
+    private getSpriteIndex(): {spriteX: number, spriteY: number} {
+        const spriteX = CARD_VALUES.findIndex((value) => this.hidden ? value === "Down" : value === this.value)
+        const spriteY = CARD_SUITS.findIndex((suit) => this.hidden ? suit === "♠️" : suit === this.suit)
+
+        return {spriteX, spriteY}
+    }
+
     setPosition(tablePosition: Point): void {
         this.tablePosition = tablePosition
     }
@@ -31,29 +37,27 @@ export class CardUI implements GameUIObject {
         this.hidden = value
     }
 
-    draw(ctx: CanvasRenderingContext2D): void {
-        const xIndex = CARD_VALUES.findIndex((value) => this.hidden ? value === "Down" : value === this.value)
-        const yIndex = CARD_SUITS.findIndex((suit) => this.hidden ? suit === "♠️" : suit === this.suit)
-        const cardImage = new Image()
-        cardImage.onload = () => {
-            const cardWidth = cardImage.width / CARD_VALUES.length;
-            const cardHeight = cardImage.height / CARD_SUITS.length;
-            const cardPixelXPos = xIndex * cardWidth;
-            const cardPixelYPos = yIndex * cardHeight;
-            const cardImageAspectRatio = cardWidth / cardHeight;
-            const cardDisplayHeight = CARD_DISPLAY_WIDTH * (1 / cardImageAspectRatio);
-            ctx.drawImage(
-                cardImage, 
-                cardPixelXPos, 
-                cardPixelYPos, 
-                cardWidth, 
-                cardHeight, 
-                this.tablePosition.x - (CARD_DISPLAY_WIDTH / 2), 
-                this.tablePosition.y - (cardDisplayHeight / 2), 
-                CARD_DISPLAY_WIDTH,
-                cardDisplayHeight
-            )
-        }
-        cardImage.src = cardSprite;
+    draw(drawingCtx: DrawingContext): void {
+        const {ctx, assets} = drawingCtx;
+        const cardImage = assets.find((el) => el.id === "card-sprite");
+        if (!cardImage) return;
+        const {spriteX, spriteY} = this.getSpriteIndex()
+        const cardWidth = cardImage.width / CARD_VALUES.length;
+        const cardHeight = cardImage.height / CARD_SUITS.length;
+        const cardPixelXPos = spriteX * cardWidth;
+        const cardPixelYPos = spriteY * cardHeight;
+        const cardImageAspectRatio = cardWidth / cardHeight;
+        const cardDisplayHeight = CARD_DISPLAY_WIDTH * (1 / cardImageAspectRatio);
+        ctx.drawImage(
+            cardImage, 
+            cardPixelXPos, 
+            cardPixelYPos, 
+            cardWidth, 
+            cardHeight, 
+            this.tablePosition.x - (CARD_DISPLAY_WIDTH / 2), 
+            this.tablePosition.y - (cardDisplayHeight / 2), 
+            CARD_DISPLAY_WIDTH,
+            cardDisplayHeight
+        )
     }
 }
