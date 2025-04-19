@@ -7,14 +7,14 @@ type CardUIProps = {
     tablePosition: Point
 }
 
-const CARD_DISPLAY_WIDTH = 50;
 
 export class CardUI implements GameUIObject {
     private value: CardValue
     private suit: CardSuit
-    private tablePosition: Point
     private hidden: boolean
-
+    public tablePosition: Point
+    public CARD_DISPLAY_WIDTH = 50 as const;
+    
     constructor(props: CardUIProps) {
         this.value = props.value
         this.suit = props.suit
@@ -47,16 +47,16 @@ export class CardUI implements GameUIObject {
         const cardPixelXPos = spriteX * cardWidth;
         const cardPixelYPos = spriteY * cardHeight;
         const cardImageAspectRatio = cardWidth / cardHeight;
-        const cardDisplayHeight = CARD_DISPLAY_WIDTH * (1 / cardImageAspectRatio);
+        const cardDisplayHeight = this.CARD_DISPLAY_WIDTH * (1 / cardImageAspectRatio);
         ctx.drawImage(
             cardImage, 
             cardPixelXPos, 
             cardPixelYPos, 
             cardWidth, 
             cardHeight, 
-            this.tablePosition.x - (CARD_DISPLAY_WIDTH / 2), 
+            this.tablePosition.x - (this.CARD_DISPLAY_WIDTH / 2), 
             this.tablePosition.y - (cardDisplayHeight / 2), 
-            CARD_DISPLAY_WIDTH,
+            this.CARD_DISPLAY_WIDTH,
             cardDisplayHeight
         )
     }

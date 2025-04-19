@@ -4,7 +4,7 @@ import gameStateReducer from "@/gameStateReducer";
 import { GameStateFactory, spawnDeck } from "@/factory/game";
 import { shuffle } from "@/utils"
 
-const deck = shuffle(spawnDeck())
+const deck = shuffle(spawnDeck(), 42)
 const factory = new GameStateFactory()
 factory.addPlayer({name: "Kevin", isMyself: true})
 factory.addPlayer({name: "CPU1", isMyself: false})
