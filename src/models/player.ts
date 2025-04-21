@@ -1,6 +1,6 @@
 import type { DrawingContext, GameUIObject, Point } from "@/models/base";
 import { CardUI } from "./card";
-import { radiansToDegrees } from "@/utils";
+
 type PlayerUIProps = {
     name: string;
     isMyself: boolean
