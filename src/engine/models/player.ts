@@ -1,4 +1,4 @@
-import { Card } from "./card";
+import { Card } from "@/engine/models/card";
 
 export class Player {
     public name: string;
@@ -12,27 +12,4 @@ export class Player {
         this.faceUpCards = faceUpCards;
         this.faceDownCards = faceDownCards;
     }
-
-    private chooseCard(card: Card, deck: Card[]): void {
-        const playerCardIndex = deck.findIndex((playerCard) => playerCard.value === card.value && playerCard.suit === card.suit)
-        if (playerCardIndex === -1) {
-            throw new Error("Card choosed is not in player hand");
-            
-        }
-
-        deck.splice(playerCardIndex, 1)
-    }
-
-    public chooseHandCard(card: Card): void {
-        return this.chooseCard(card, this.hand)
-    }
-
-    public chooseFaceUpCard(card: Card): void {
-       return this.chooseCard(card, this.faceUpCards)
-    }
-
-    public addCards(...cards: Card[]): void {
-        this.hand = this.hand.concat(cards);
-    }
-
 }

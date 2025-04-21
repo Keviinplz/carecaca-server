@@ -1,7 +1,7 @@
 import { type CardValue } from "@/engine/constants";
-import { Card } from "./models/card";
-import { Player } from "./models/player";
-import { GamePhase } from "./phases/base";
+import { Card } from "@/engine/models/card";
+import { Player } from "@/engine/models/player";
+import { GamePhase } from "@/engine/phases/base";
 
 export type GameState = {
     table: {
@@ -14,19 +14,18 @@ export type GameState = {
         isClockwise: boolean,
         currentIndex: number
     }
+    currentPhase: string
 }
 
 export class GameContext {
-
-    private phase: GamePhase;
+    private phase!: GamePhase;
     private wildCards: CardValue[];
     public state: GameState;
 
     constructor(initialState: GameState, initialPhase: GamePhase) {
         this.state = initialState
-        this.phase = initialPhase
         this.wildCards = ["2", "10", "Joker"]
-        this.phase.setContext(this);
+        this.transitionTo(initialPhase)
     }
 
     public gameStillPlayable(): boolean {
@@ -154,5 +153,6 @@ export class GameContext {
     public transitionTo(phase: GamePhase): void {
         this.phase = phase;
         this.phase.setContext(this);
+        this.state.currentPhase = phase.name;
     }
 }

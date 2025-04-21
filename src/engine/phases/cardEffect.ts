@@ -1,8 +1,10 @@
 import { type CardValue } from "@/engine/constants";
-import { GamePhase } from "./base";
-import { PlayerPlayabilityPhase } from "./playerPlayability";
+import { GamePhase } from "@/engine/phases/base";
+import { PlayerPlayabilityPhase } from "@/engine/phases/playerPlayability";
 
 export class CardEffectPhase extends GamePhase {
+    public name: string = "CardEffect";
+
     public handlePlayerPlayability(): void { }
     public handlePlayedCard(cardValue: CardValue): void { }
     public handleCardEffect(): void {

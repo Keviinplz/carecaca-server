@@ -1,9 +1,10 @@
 import { type CardValue } from "@/engine/constants";
-import { type GameContext } from "@/enginev2/context";
+import { type GameContext } from "@/engine/context";
 
 
 export abstract class GamePhase {
-    protected ctx: GameContext;
+    protected ctx!: GameContext;
+    public abstract name: string;
 
     public setContext(ctx: GameContext) {
         this.ctx = ctx;

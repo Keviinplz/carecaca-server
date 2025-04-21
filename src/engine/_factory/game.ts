@@ -1,11 +1,11 @@
 import { Card } from "@/engine/models/card";
 import { Player } from "@/engine/models/player";
 import { CARD_SUITS, CARD_VALUES, type CardValue } from "@/engine/constants";
-import * as action from "@/engine/actions/card";
+import * as action from "@/engine/_actions/card";
 import { GameController } from "..";
 import { GameContext } from "@/engine/contexts/game";
 import { TableContext } from "@/engine/contexts/table";
-import { GameRuler } from "@/engine/rulers/gameRuler";
+import { GameRuler } from "@/engine/_rulers/gameRuler";
 
 export class GameFactory {
     private players: Player[];

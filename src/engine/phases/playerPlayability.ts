@@ -1,9 +1,10 @@
 import { type CardValue } from "@/engine/constants";
-import { GamePhase } from "./base";
-import { EndPhase } from "./end";
-import { PlayingPhase } from "./playing";
+import { GamePhase } from "@/engine/phases/base";
+import { EndPhase } from "@/engine/phases/end";
+import { PlayingPhase } from "@/engine/phases/playing";
 
 export class PlayerPlayabilityPhase extends GamePhase {
+    public name: string = "PlayerPlayability";
 
     public handlePlayerPlayability() {
         if (!this.ctx.gameStillPlayable()) {
