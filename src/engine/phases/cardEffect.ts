@@ -1,36 +1,34 @@
 import { type CardValue } from "@/engine/constants";
 import { GamePhase } from "@/engine/phases/base";
 import { PlayerPlayabilityPhase } from "@/engine/phases/playerPlayability";
+import { GameContext } from "../context";
 
-export class CardEffectPhase extends GamePhase {
-    public name: string = "CardEffect";
+export class CardEffectPhase implements GamePhase {
+    public ctx: GameContext | null;
+    
+    constructor() {
+        this.ctx = null
+    }
+
+    public setContext(ctx: GameContext): void {
+        this.ctx = ctx
+    }
+
+    getName(): string {
+        return "CardEffect"
+    }
 
     public handlePlayerPlayability(): void { }
     public handlePlayedCard(cardValue: CardValue): void { }
     public handleCardEffect(): void {
-        const card = this.ctx.getTopCard()
+        if (!this.ctx) return;
+        const ctx = this.ctx
+
+        const card = ctx.table.getTopCard()
         if (card == null) return;
 
-        // TODO: Transladar la responsabilidad de aplicar el efecto a la carta en sí
-        switch (card.value) {
-            case "7":
-                this.ctx.invertPileOrder()
-                return this.ctx.transitionTo(new PlayerPlayabilityPhase())
-            case "8":
-                this.ctx.skipNextPlayer()
-                return this.ctx.transitionTo(new PlayerPlayabilityPhase())
-            case "10":
-                this.ctx.burn()
-                return this.ctx.transitionTo(new PlayerPlayabilityPhase())
-            case "J":
-                this.ctx.reverseTurnOrder()
-                return this.ctx.transitionTo(new PlayerPlayabilityPhase())
-            case "Joker":
-                const nextPlayer = this.ctx.getNextPlayer()
-                this.ctx.penaltyPlayer(nextPlayer)
-                return this.ctx.transitionTo(new PlayerPlayabilityPhase())
-            default:
-                return this.ctx.transitionTo(new PlayerPlayabilityPhase())
-        }
+        card.applyEffect(ctx);
+        ctx.turn.next()
+        return ctx.transitionTo(new PlayerPlayabilityPhase())
     }
 }

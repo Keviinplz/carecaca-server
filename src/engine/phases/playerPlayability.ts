@@ -2,35 +2,51 @@ import { type CardValue } from "@/engine/constants";
 import { GamePhase } from "@/engine/phases/base";
 import { EndPhase } from "@/engine/phases/end";
 import { PlayingPhase } from "@/engine/phases/playing";
+import { GameContext } from "../context";
 
-export class PlayerPlayabilityPhase extends GamePhase {
-    public name: string = "PlayerPlayability";
+export class PlayerPlayabilityPhase implements GamePhase {
+    public ctx: GameContext | null;
+
+    constructor() {
+        this.ctx = null
+    }
+
+    setContext(ctx: GameContext): void {
+        this.ctx = ctx
+    }
+
+    getName(): string {
+        return "PlayerPlayability"
+    }
 
     public handlePlayerPlayability() {
-        if (!this.ctx.gameStillPlayable()) {
-            this.ctx.transitionTo(new EndPhase())
+        if (this.ctx === null) return;
+        const ctx = this.ctx
+
+        if (!ctx.gameStillPlayable()) {
+            ctx.transitionTo(new EndPhase())
         }
-        const currentPlayer = this.ctx.getCurrentPlayer();
+        const currentPlayer = ctx.turn.getCurrentPlayer();
 
         let playerWins = !currentPlayer.hand && !currentPlayer.faceUpCards && !currentPlayer.faceDownCards
         if (playerWins) {
-            this.ctx.nextTurn()
-            return this.ctx.transitionTo(new PlayerPlayabilityPhase())
+            ctx.turn.next()
+            return ctx.transitionTo(new PlayerPlayabilityPhase())
         }
 
-        if (currentPlayer.hand && currentPlayer.hand.some((handCard) => this.ctx.cardIsPlayable(handCard.value))) {
-            return this.ctx.transitionTo(new PlayingPhase())
+        if (currentPlayer.hand && currentPlayer.hand.some((handCard) => ctx.cardIsPlayable(handCard.value))) {
+            return ctx.transitionTo(new PlayingPhase())
         }
-        if (!currentPlayer.hand && currentPlayer.faceUpCards && currentPlayer.faceUpCards.some((upCard) => this.ctx.cardIsPlayable(upCard.value))) {
-            return this.ctx.transitionTo(new PlayingPhase())
+        if (!currentPlayer.hand && currentPlayer.faceUpCards && currentPlayer.faceUpCards.some((upCard) => ctx.cardIsPlayable(upCard.value))) {
+            return ctx.transitionTo(new PlayingPhase())
         }
         if (!currentPlayer.hand && !currentPlayer.faceUpCards && currentPlayer.faceDownCards) {
-            return this.ctx.transitionTo(new PlayingPhase())
+            return ctx.transitionTo(new PlayingPhase())
         }
 
-        this.ctx.penaltyPlayer(currentPlayer)
-        this.ctx.nextTurn()
-        return this.ctx.transitionTo(new PlayerPlayabilityPhase())
+        ctx.penaltyPlayer(currentPlayer)
+        ctx.turn.next()
+        return ctx.transitionTo(new PlayerPlayabilityPhase())
     }
 
     public handlePlayedCard(cardValue: CardValue): void { }
