@@ -26,7 +26,7 @@ export class GameContext {
         this.phase = phase;
     }
 
-    public applyPenaltyAndCompleteTurn(player: Player): void {
+    public applyPenalty(player: Player): void {
         this.rules.applyPenalty(player, this.table);
     }
 

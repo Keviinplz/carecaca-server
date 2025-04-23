@@ -4,10 +4,6 @@ import { GameContext } from "@/engine/context";
 import { Phases } from "@/engine/phases/registry";
 
 export class PlayerPlayabilityPhase implements GamePhase {
-    getName(): string {
-        return "PlayerPlayability"
-    }
-
     public handlePlayerPlayability(ctx: GameContext) {
         if (!ctx.rules.isGameStillPlayable(ctx.players)) {
             ctx.transitionTo(Phases.end)
@@ -25,7 +21,8 @@ export class PlayerPlayabilityPhase implements GamePhase {
             return ctx.transitionTo(Phases.playing)
         }
 
-        return ctx.applyPenaltyAndCompleteTurn(currentPlayer)
+        ctx.applyPenalty(currentPlayer)
+        ctx.completeTurn()
     }
 
     public handlePlayedCard(_ctx: GameContext, _cardValue: CardValue): void {}

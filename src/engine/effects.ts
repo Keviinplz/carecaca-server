@@ -32,6 +32,6 @@ export class TogglePileOrderEffect implements CardEffect {
 export class PunishPlayerEffect implements CardEffect {
     public apply(ctx: GameContext): void {
         const nextPlayer = ctx.turn.getNextPlayer()
-        ctx.penaltyPlayer(nextPlayer)
+        ctx.applyPenalty(nextPlayer)
     }
 }

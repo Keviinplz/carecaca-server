@@ -9,3 +9,5 @@ export const Phases = {
     cardEffect: new CardEffectPhase(),
     end: new EndPhase(),
 } as const;
+
+export type PhaseKey = keyof typeof Phases;

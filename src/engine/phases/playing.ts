@@ -7,10 +7,6 @@ import { Table } from "@/engine/models/table";
 import { Card } from "@/engine/models/card";
 
 export class PlayingPhase implements GamePhase {
-    getName(): string {
-        return "PlayingPhase"
-    }
-
     public handlePlayerPlayability(_ctx: GameContext): void { }
 
     public handlePlayedCard(ctx: GameContext, cardValue: CardValue): void {
@@ -19,14 +15,22 @@ export class PlayingPhase implements GamePhase {
         const rules = ctx.rules;
 
         const expectedSource = this.getExpectedPlaySource(currentPlayer)
-        if (!expectedSource) return ctx.applyPenaltyAndCompleteTurn(currentPlayer);
+        if (!expectedSource) {
+            ctx.applyPenalty(currentPlayer)
+            ctx.completeTurn()
+            return;
+        }
 
         const { isHand } = expectedSource;
 
         const cardExists = isHand ? currentPlayer.hasCardInHand(cardValue) : currentPlayer.hasCardInFaceUp(cardValue);
         const isCardPlayable = rules.isCardPlayable(cardValue, table);
 
-        if (!(cardExists && isCardPlayable)) return ctx.applyPenaltyAndCompleteTurn(currentPlayer);
+        if (!(cardExists && isCardPlayable)) {
+            ctx.applyPenalty(currentPlayer)
+            ctx.completeTurn()
+            return;
+        }
 
         this.executePlay(ctx, currentPlayer, cardValue, isHand);
     }
@@ -40,7 +44,8 @@ export class PlayingPhase implements GamePhase {
         const cardIndexOutOfBound = cardIndex < 0 || cardIndex >= currentPlayer.faceDownCards.length;
 
         if (playerHasCardsToPlay || cardIndexOutOfBound) {
-            ctx.applyPenaltyAndCompleteTurn(currentPlayer);
+            ctx.applyPenalty(currentPlayer)
+            ctx.completeTurn()
             return;
         }
 

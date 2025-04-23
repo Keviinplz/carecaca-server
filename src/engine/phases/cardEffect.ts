@@ -3,10 +3,6 @@ import { GamePhase } from "@/engine/phases/base";
 import { GameContext } from "@/engine/context";
 
 export class CardEffectPhase implements GamePhase {
-    getName(): string {
-        return "CardEffect"
-    }
-
     public handlePlayerPlayability(_ctx: GameContext): void {}
     public handlePlayedCard(_ctx: GameContext, _cardValue: CardValue): void {}
     public handlePlayFaceDownCard(_ctx: GameContext, _cardIndex: number): void {}
