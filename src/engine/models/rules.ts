@@ -5,9 +5,8 @@ import { Table } from "@/engine/models/table";
 export class GameRules {
     private wildCards: CardValue[];
 
-    constructor(wildCards: CardValue[] | null = null) {
-        // Could potentially load rules from config here
-        this.wildCards = wildCards ?? ["2", "10", "Joker"];
+    constructor(wildCards: CardValue[]) {
+        this.wildCards = wildCards
     }
 
     canPlayerPlayFromHand(player: Player, table: Table): boolean {
