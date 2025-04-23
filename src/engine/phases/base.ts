@@ -1,11 +1,11 @@
-import { type GameContext } from "@/engine/context";
-import { CardValue } from "../constants";
+import { CardValue } from "@/engine/constants";
+import { GameContext } from "@/engine/context";
 
 export interface GamePhase {
 
     getName(): string;
-    setContext(ctx: GameContext): void;
-    handlePlayerPlayability(): void;
-    handlePlayedCard(cardValue: CardValue): void;
-    handleCardEffect(): void;
+    handlePlayerPlayability(ctx: GameContext): void;
+    handlePlayedCard(ctx: GameContext, cardValue: CardValue): void;
+    handlePlayFaceDownCard(ctx: GameContext, cardIndex: number): void;
+    handleCardEffect(ctx: GameContext): void;
 }

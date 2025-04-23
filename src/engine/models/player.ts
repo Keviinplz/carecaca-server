@@ -15,23 +15,41 @@ export class Player {
         this.faceDownCards = faceDownCards;
     }
 
-    public getCard(value: CardValue, removeFromPlayer: boolean): Card | null {
-        let targetCard: Card | null;
-        if (this.hand) {
-            targetCard = utils.getCardFromStack(this.hand, value, removeFromPlayer)
-            if (targetCard) return targetCard;
-        }
+    public won(): boolean {
+        return this.hand.length === 0 &&
+            this.faceUpCards.length === 0 &&
+            this.faceDownCards.length === 0;
+    }
 
-        if (this.faceUpCards) {
-            targetCard = utils.getCardFromStack(this.faceUpCards, value, removeFromPlayer)
-            if (targetCard) return targetCard;
-        }
+    public addCardsToHand(...cards: Card[]): void {
+        this.hand.push(...cards);
+    }
 
-        if (this.faceDownCards) {
-            targetCard = utils.getCardFromStack(this.faceDownCards, value, removeFromPlayer)
-            if (targetCard) return targetCard;
-        }
+    public findCardInHand(value: CardValue): Card | undefined {
+        return utils.findCardInStack(this.hand, value);
+    }
 
-        return null;
+    public findCardInFaceUp(value: CardValue): Card | undefined {
+        return utils.findCardInStack(this.faceUpCards, value);
+    }
+
+    public hasCardInHand(value: CardValue): boolean {
+        return this.hand.some(card => card.value === value);
+    }
+
+    public hasCardInFaceUp(value: CardValue): boolean {
+        return this.faceUpCards.some(card => card.value === value);
+    }
+
+    public removeCardFromHand(value: CardValue): Card | undefined {
+        return utils.removeCardFromStackByValue(this.hand, value);
+    }
+
+    public removeCardFromFaceUp(value: CardValue): Card | undefined {
+        return utils.removeCardFromStackByValue(this.faceUpCards, value);
+    }
+
+    public removeFaceDownCardByIndex(index: number): Card | undefined {
+        return utils.removeCardFromStackByIndex(this.faceDownCards, index);
     }
 }

@@ -1,54 +1,34 @@
 import { type CardValue } from "@/engine/constants";
 import { GamePhase } from "@/engine/phases/base";
-import { EndPhase } from "@/engine/phases/end";
-import { PlayingPhase } from "@/engine/phases/playing";
-import { GameContext } from "../context";
+import { GameContext } from "@/engine/context";
+import { Phases } from "@/engine/phases/registry";
 
 export class PlayerPlayabilityPhase implements GamePhase {
-    public ctx: GameContext | null;
-
-    constructor() {
-        this.ctx = null
-    }
-
-    setContext(ctx: GameContext): void {
-        this.ctx = ctx
-    }
-
     getName(): string {
         return "PlayerPlayability"
     }
 
-    public handlePlayerPlayability() {
-        if (this.ctx === null) return;
-        const ctx = this.ctx
-
-        if (!ctx.gameStillPlayable()) {
-            ctx.transitionTo(new EndPhase())
+    public handlePlayerPlayability(ctx: GameContext) {
+        if (!ctx.rules.isGameStillPlayable(ctx.players)) {
+            ctx.transitionTo(Phases.end)
         }
+
         const currentPlayer = ctx.turn.getCurrentPlayer();
 
-        let playerWins = !currentPlayer.hand && !currentPlayer.faceUpCards && !currentPlayer.faceDownCards
-        if (playerWins) {
-            ctx.turn.next()
-            return ctx.transitionTo(new PlayerPlayabilityPhase())
+        if (currentPlayer.won()) return ctx.completeTurn()
+
+        const canPlayFromHand = ctx.rules.canPlayerPlayFromHand(currentPlayer, ctx.table)
+        const candPlayFromFaceUp = ctx.rules.canPlayerPlayFromFaceUp(currentPlayer, ctx.table)
+        const canPlayFromFaceDown = ctx.rules.canPlayerPlayFromFaceDown(currentPlayer, ctx.table)
+
+        if (canPlayFromHand || candPlayFromFaceUp || canPlayFromFaceDown) {
+            return ctx.transitionTo(Phases.playing)
         }
 
-        if (currentPlayer.hand && currentPlayer.hand.some((handCard) => ctx.cardIsPlayable(handCard.value))) {
-            return ctx.transitionTo(new PlayingPhase())
-        }
-        if (!currentPlayer.hand && currentPlayer.faceUpCards && currentPlayer.faceUpCards.some((upCard) => ctx.cardIsPlayable(upCard.value))) {
-            return ctx.transitionTo(new PlayingPhase())
-        }
-        if (!currentPlayer.hand && !currentPlayer.faceUpCards && currentPlayer.faceDownCards) {
-            return ctx.transitionTo(new PlayingPhase())
-        }
-
-        ctx.penaltyPlayer(currentPlayer)
-        ctx.turn.next()
-        return ctx.transitionTo(new PlayerPlayabilityPhase())
+        return ctx.applyPenaltyAndCompleteTurn(currentPlayer)
     }
 
-    public handlePlayedCard(cardValue: CardValue): void { }
-    public handleCardEffect(): void { }
+    public handlePlayedCard(_ctx: GameContext, _cardValue: CardValue): void {}
+    public handlePlayFaceDownCard(_ctx: GameContext, _cardIndex: number): void {}
+    public handleCardEffect(_ctx: GameContext): void {}
 }
