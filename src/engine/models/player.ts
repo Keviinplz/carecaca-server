@@ -10,9 +10,9 @@ export class Player {
 
     constructor(name: string, hand: Card[], faceUpCards: Card[], faceDownCards: Card[]) {
         this.name = name;
-        this.hand = hand;
-        this.faceUpCards = faceUpCards;
-        this.faceDownCards = faceDownCards;
+        this.hand = [...hand];
+        this.faceUpCards = [...faceUpCards];
+        this.faceDownCards = [...faceDownCards];
     }
 
     public won(): boolean {

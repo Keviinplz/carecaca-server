@@ -10,8 +10,8 @@ export class Turn {
         initialIndex: number = 0,
         initialDirection: boolean = true
     ) {
-        if (players.length === 0) {
-            throw new Error("At least one player required.");
+        if (players.length <= 1) {
+            throw new Error("At least two players required.");
         }
         this.currentIndex = Math.max(0, Math.min(initialIndex, players.length - 1));
         this.isClockwise = initialDirection;
@@ -20,9 +20,6 @@ export class Turn {
 
     public next(): void {
         const playerCount = this.players.length;
-        if (playerCount <= 1) {
-            return;
-        }
 
         if (this.isClockwise) {
             this.currentIndex = (this.currentIndex + 1) % playerCount;
@@ -32,20 +29,11 @@ export class Turn {
     }
 
     public getCurrentPlayer(): Player {
-         if (!this.players[this.currentIndex]) {
-             throw new Error(
-                `currentIndex overflow, currentIndex=${this.currentIndex} playersLength=${this.players.length}`
-            );
-         }
         return this.players[this.currentIndex];
     }
 
     public getNextPlayerIndex(): number {
         const playerCount = this.players.length;
-
-        if (playerCount <= 1) {
-            return this.currentIndex;
-        }
 
         let nextIndex: number;
         if (this.isClockwise) {
@@ -59,14 +47,7 @@ export class Turn {
 
     public getNextPlayer(): Player {
         const nextIndex = this.getNextPlayerIndex();
-        const nextPlayer = this.players[nextIndex];
-
-        if (!nextPlayer) {
-            throw new Error(
-                `nextIndex overflow, nextIndex=${nextIndex} playersLength=${this.players.length}`
-            );
-         }
-        return nextPlayer;
+        return this.players[nextIndex];
     }
 
     public getCurrentIndex(): number {

@@ -27,3 +27,4 @@
 *.tsbuildinfo
 node_modules/
 dist/
+coverage/

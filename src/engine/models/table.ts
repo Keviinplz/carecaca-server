@@ -6,8 +6,8 @@ export class Table {
     public isPileAscending: boolean;
     
     constructor(discardPile: Card[], drawDeck: Card[], isPileAscending: boolean) {
-        this.discardPile = discardPile;
-        this.drawDeck = drawDeck;
+        this.discardPile = [...discardPile];
+        this.drawDeck = [...drawDeck];
         this.isPileAscending = isPileAscending
     }
 
@@ -21,5 +21,9 @@ export class Table {
 
     burn() {
         this.discardPile = []
+    }
+
+    draw() {
+        return this.drawDeck.pop()
     }
 }

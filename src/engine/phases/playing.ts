@@ -85,7 +85,7 @@ export class PlayingPhase implements GamePhase {
 
     private refillPlayerHand(player: Player, table: Table): void {
         while (player.hand.length < 3 && table.drawDeck.length > 0) {
-            player.addCardsToHand(table.drawDeck.pop()!);
+            player.addCardsToHand(table.draw()!);
         }
     }
 

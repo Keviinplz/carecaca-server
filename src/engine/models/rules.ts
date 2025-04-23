@@ -6,7 +6,7 @@ export class GameRules {
     private wildCards: CardValue[];
 
     constructor(wildCards: CardValue[]) {
-        this.wildCards = wildCards
+        this.wildCards = [...wildCards]
     }
 
     canPlayerPlayFromHand(player: Player, table: Table): boolean {
