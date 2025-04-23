@@ -1,6 +1,6 @@
-import { type CardValue } from "@/engine/constants";
-import { GamePhase } from "@/engine/phases/base";
-import { GameContext } from "@/engine/context";
+import { type CardValue } from "@engine/constants";
+import { GamePhase } from "@engine/phases/base";
+import { GameContext } from "@engine/context";
 
 export class EndPhase implements GamePhase {
     public handlePlayerPlayability(_ctx: GameContext): void {}

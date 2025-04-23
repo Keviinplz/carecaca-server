@@ -1,10 +1,10 @@
-import { type CardValue } from "@/engine/constants"
-import { GamePhase } from "@/engine/phases/base"
-import { GameContext } from "@/engine/context";
-import { Phases } from "@/engine/phases/registry";
-import { Player } from "@/engine/models/player";
-import { Table } from "@/engine/models/table";
-import { Card } from "@/engine/models/card";
+import { type CardValue } from "@engine/constants"
+import { GamePhase } from "@engine/phases/base"
+import { GameContext } from "@engine/context";
+import { Phases } from "@engine/phases/registry";
+import { Player } from "@engine/models/player";
+import { Table } from "@engine/models/table";
+import { Card } from "@engine/models/card";
 
 export class PlayingPhase implements GamePhase {
     public handlePlayerPlayability(_ctx: GameContext): void { }

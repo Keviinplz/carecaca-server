@@ -1,4 +1,4 @@
-import { GameContext } from "@/engine/context";
+import { GameContext } from "@engine/context";
 
 export interface CardEffect {
     apply(ctx: GameContext): void;

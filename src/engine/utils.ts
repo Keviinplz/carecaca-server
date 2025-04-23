@@ -1,5 +1,5 @@
-import { CardValue } from "@/engine/constants"
-import { Card } from "@/engine/models/card"
+import { CardValue } from "@engine/constants"
+import { Card } from "@engine/models/card"
 
 export function findCardInStack(stack: Card[], targetCardValue: CardValue): Card | undefined {
     return stack.find((card) => card.value === targetCardValue);

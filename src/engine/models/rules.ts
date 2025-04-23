@@ -1,6 +1,6 @@
-import { CardValue } from "@/engine/constants";
-import { Player } from "@/engine/models/player";
-import { Table } from "@/engine/models/table";
+import { CardValue } from "@engine/constants";
+import { Player } from "@engine/models/player";
+import { Table } from "@engine/models/table";
 
 export class GameRules {
     private wildCards: CardValue[];

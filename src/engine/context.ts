@@ -1,10 +1,10 @@
-import { Player } from "@/engine/models/player";
-import { GamePhase } from "@/engine/phases/base";
-import { Table } from "@/engine/models/table";
-import { Turn } from "@/engine/models/turn";
-import { GameRules } from "@/engine/models/rules";
-import { CardValue } from "@/engine/constants";
-import { Phases } from "@/engine/phases/registry";
+import { Player } from "@engine/models/player";
+import { GamePhase } from "@engine/phases/base";
+import { Table } from "@engine/models/table";
+import { Turn } from "@engine/models/turn";
+import { GameRules } from "@engine/models/rules";
+import { CardValue } from "@engine/constants";
+import { Phases } from "@engine/phases/registry";
 
 export class GameContext {
     public table: Table;

@@ -1,6 +1,6 @@
-import { Card } from "@/engine/models/card";
-import { CardValue } from "@/engine/constants";
-import * as utils from "@/engine/utils";
+import { Card } from "@engine/models/card";
+import { CardValue } from "@engine/constants";
+import * as utils from "@engine/utils";
 
 export class Player {
     public name: string;

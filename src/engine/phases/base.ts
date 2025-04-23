@@ -1,5 +1,5 @@
-import { CardValue } from "@/engine/constants";
-import { GameContext } from "@/engine/context";
+import { CardValue } from "@engine/constants";
+import { GameContext } from "@engine/context";
 
 export interface GamePhase {
     handlePlayerPlayability(ctx: GameContext): void;

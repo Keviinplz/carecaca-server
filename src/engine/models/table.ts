@@ -1,4 +1,4 @@
-import { Card } from "@/engine/models/card";
+import { Card } from "@engine/models/card";
 
 export class Table {
     public discardPile: Card[];

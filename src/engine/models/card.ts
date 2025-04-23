@@ -1,6 +1,6 @@
-import { type CardValue } from "@/engine/constants";
-import { GameContext } from "@/engine/context";
-import { CardEffect } from "@/engine/effects";
+import { type CardValue } from "@engine/constants";
+import { GameContext } from "@engine/context";
+import { CardEffect } from "@engine/effects";
 
 export class Card {
     public value: CardValue;

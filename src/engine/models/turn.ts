@@ -1,4 +1,4 @@
-import { Player } from "@/engine/models/player";
+import { Player } from "@engine/models/player";
 
 export class Turn {
     private players: ReadonlyArray<Player>;

@@ -1,13 +1,13 @@
-import { Card } from "@/engine/models/card";
-import { Player } from "@/engine/models/player";
-import { CARD_VALUES, type CardValue } from "@/engine/constants";
-import * as effect from "@/engine/effects";
-import * as utils from "@/engine/utils";
-import { GameContext } from "@/engine/context";
-import { Table } from "@/engine/models/table";
-import { Turn } from "@/engine/models/turn";
-import { Phases } from "@/engine/phases/registry";
-import { GameRules } from "@/engine/models/rules";
+import { Card } from "@engine/models/card";
+import { Player } from "@engine/models/player";
+import { CARD_VALUES, type CardValue } from "@engine/constants";
+import * as effect from "@engine/effects";
+import * as utils from "@engine/utils";
+import { GameContext } from "@engine/context";
+import { Table } from "@engine/models/table";
+import { Turn } from "@engine/models/turn";
+import { Phases } from "@engine/phases/registry";
+import { GameRules } from "@engine/models/rules";
 
 export class GameFactory {
     private players: Player[];

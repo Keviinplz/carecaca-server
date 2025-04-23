@@ -1,7 +1,7 @@
-import { PlayerPlayabilityPhase } from '@/engine/phases/playerPlayability';
-import { PlayingPhase } from '@/engine/phases/playing';
-import { CardEffectPhase } from '@/engine/phases/cardEffect';
-import { EndPhase } from '@/engine/phases/end';
+import { PlayerPlayabilityPhase } from '@engine/phases/playerPlayability';
+import { PlayingPhase } from '@engine/phases/playing';
+import { CardEffectPhase } from '@engine/phases/cardEffect';
+import { EndPhase } from '@engine/phases/end';
 
 export const Phases = {
     playerPlayability: new PlayerPlayabilityPhase(),
