@@ -2,10 +2,10 @@ import { GameContext } from "@engine/context"
 import { CardEffect } from "@engine/effects"
 import { Card } from "@engine/models/card"
 import { Phases } from "@engine/phases/registry"
-import { Table } from "./table"
-import { Turn } from "./turn"
-import { Player } from "./player"
-import { GameRules } from "./rules"
+import { Table } from "@engine/models/table"
+import { Turn } from "@engine/models/turn"
+import { Player } from "@engine/models/player"
+import { GameRules } from "@engine/models/rules"
 
 class TestEffect implements CardEffect {
     apply(ctx: GameContext): void {
