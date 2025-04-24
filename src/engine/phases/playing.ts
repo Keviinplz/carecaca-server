@@ -56,7 +56,7 @@ export class PlayingPhase implements GamePhase {
             return ctx.transitionTo(Phases.cardEffect);
         }
 
-        rules.applyPenalty(currentPlayer, table);
+        ctx.applyPenalty(currentPlayer);
         currentPlayer.addCardsToHand(cardToPlay);
         ctx.completeTurn()
     }

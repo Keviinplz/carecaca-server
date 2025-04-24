@@ -27,7 +27,8 @@ export class GameContext {
     }
 
     public applyPenalty(player: Player): void {
-        this.rules.applyPenalty(player, this.table);
+        player.addCardsToHand(...this.table.discardPile)
+        this.table.burn();
     }
 
     public completeTurn(): void {

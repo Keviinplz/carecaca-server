@@ -15,7 +15,7 @@ export class PlayerPlayabilityPhase implements GamePhase {
 
         const canPlayFromHand = ctx.rules.canPlayerPlayFromHand(currentPlayer, ctx.table)
         const candPlayFromFaceUp = ctx.rules.canPlayerPlayFromFaceUp(currentPlayer, ctx.table)
-        const canPlayFromFaceDown = ctx.rules.canPlayerPlayFromFaceDown(currentPlayer, ctx.table)
+        const canPlayFromFaceDown = ctx.rules.canPlayerPlayFromFaceDown(currentPlayer)
 
         if (canPlayFromHand || candPlayFromFaceUp || canPlayFromFaceDown) {
             return ctx.transitionTo(Phases.playing)

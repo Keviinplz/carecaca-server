@@ -17,10 +17,10 @@ export class GameRules {
         return player.hand.length === 0 && player.faceUpCards.some((card) => this.isCardPlayable(card.value, table));
     }
 
-    canPlayerPlayFromFaceDown(player: Player, table: Table): boolean {
+    canPlayerPlayFromFaceDown(player: Player): boolean {
         return (player.hand.length === 0 && 
             player.faceUpCards.length === 0 && 
-            player.faceDownCards.some((card) => this.isCardPlayable(card.value, table))
+            player.faceDownCards.length > 0
         );
     }
 
@@ -50,10 +50,5 @@ export class GameRules {
     private getCardRank(value: CardValue): number {
         const rankOrder = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A", "Joker"];
         return rankOrder.indexOf(value);
-    }
-
-    applyPenalty(player: Player, table: Table): void {
-        player.addCardsToHand(...table.discardPile)
-        table.burn();
     }
 }
