@@ -5,9 +5,7 @@ import { Phases } from "@engine/phases/registry";
 
 export class PlayerPlayabilityPhase implements GamePhase {
     public handlePlayerPlayability(ctx: GameContext) {
-        if (!ctx.rules.isGameStillPlayable(ctx.players)) {
-            ctx.transitionTo(Phases.end)
-        }
+        if (!ctx.rules.isGameStillPlayable(ctx.players)) return ctx.transitionTo(Phases.end)
 
         const currentPlayer = ctx.turn.getCurrentPlayer();
 
