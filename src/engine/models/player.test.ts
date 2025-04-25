@@ -1,6 +1,5 @@
 import { Player } from "@engine/models/player"
 import { Card } from "@engine/models/card"
-import type { CardValue } from "@engine/constants"
 
 describe('Player', () => {
     

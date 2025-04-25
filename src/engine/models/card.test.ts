@@ -1,44 +1,41 @@
 import { GameContext } from "@engine/context"
-import { CardEffect } from "@engine/effects"
+import { CardEffect } from "@engine/effects";
 import { Card } from "@engine/models/card"
-import { Phases } from "@engine/phases/registry"
-import { Table } from "@engine/models/table"
-import { Turn } from "@engine/models/turn"
-import { Player } from "@engine/models/player"
-import { GameRules } from "@engine/models/rules"
 
-class TestEffect implements CardEffect {
-    apply(ctx: GameContext): void {
-        ctx.table.discardPile.push(new Card("A"))
-    }
+const mockApplyFn = jest.fn();
+
+class MockEffect implements CardEffect {
+    apply = mockApplyFn
 }
 
+const createMockContext = (): Partial<GameContext> => ({});
+
+
 describe('Card', () => {
-    const testEffect = new TestEffect()
-    const cardWithoutEffects = new Card("2")
-    const cardWithEffects = new Card("2", testEffect)
+    let mockCtx: Partial<GameContext>;
+    let cardWithEffect: Card;
+    let cardWithoutEffect: Card;
+    let mockEffect: CardEffect;
 
-    const table = new Table([], [], true)
-    const players = [new Player("a", [], [], []), new Player("b", [], [], [])]
-    const turn = new Turn(players, 0, true)
-    const rules = new GameRules([])
-    const ctx = new GameContext(
-        Phases.end,
-        table,
-        turn,
-        players,
-        rules
-    )
+    beforeEach(() => {
+        mockApplyFn.mockClear();
+        mockCtx = createMockContext();
+        mockEffect = new MockEffect()
+
+        cardWithoutEffect = new Card("3")
+        cardWithEffect = new Card("7", mockEffect)
+    });
+
     test('Card without effect should return instantly and not apply effect', () => {
-        cardWithoutEffects.applyEffect(ctx)
+        cardWithoutEffect.applyEffect(mockCtx as GameContext)
 
-        expect(ctx.table.discardPile).toHaveLength(0)
+        expect(mockApplyFn).not.toHaveBeenCalled();
     })
 
-    test('Card with effect should do something to context', () => {
-        cardWithEffects.applyEffect(ctx)
+    test('Card with effect should apply effect and passes ctx as reference', () => {
+        cardWithEffect.applyEffect(mockCtx as GameContext)
 
-        expect(ctx.table.discardPile).toHaveLength(1)
-        expect(ctx.table.discardPile[0].value).toBe("A")
+        expect(mockApplyFn).toHaveBeenCalledTimes(1)
+        expect(mockApplyFn).toHaveBeenCalledWith(mockCtx);
     })
 })
