@@ -49,7 +49,7 @@ export class Player {
         return utils.removeCardFromStackByValue(this.faceUpCards, value);
     }
 
-    public removeFaceDownCardByIndex(index: number): Card | undefined {
-        return utils.removeCardFromStackByIndex(this.faceDownCards, index);
+    public removeFaceDownCard(): Card | undefined {
+        return utils.removeCardFromStackByIndex(this.faceDownCards, this.faceDownCards.length - 1);
     }
 }

@@ -5,6 +5,6 @@ import { GameContext } from "@engine/context";
 export class EndPhase implements GamePhase {
     public handlePlayerPlayability(_ctx: GameContext): void {}
     public handlePlayedCard(_ctx: GameContext, _cardValue: CardValue): void {}
-    public handlePlayFaceDownCard(_ctx: GameContext, _cardIndex: number): void {}
+    public handlePlayFaceDownCard(_ctx: GameContext): void {}
     public handleCardEffect(_ctx: GameContext): void {}
 }

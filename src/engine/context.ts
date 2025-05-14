@@ -22,7 +22,7 @@ export class GameContext {
         this.transitionTo(initialPhase)
     }
 
-    public transitionTo(phase: GamePhase): void {
+    private transitionTo(phase: GamePhase): void {
         this.phase = phase;
     }
 
@@ -33,7 +33,7 @@ export class GameContext {
 
     public completeTurn(): void {
         this.turn.next();
-        this.transitionTo(Phases.playerPlayability);
+        this.toPlayerPlayabilityPhase();
     }
 
     public handlePlayerPlayability(): void {
@@ -44,11 +44,27 @@ export class GameContext {
         this.phase.handlePlayedCard(this, cardValue);
     }
 
-    public handlePlayFaceDownCard(cardIndex: number): void {
-        this.phase.handlePlayFaceDownCard(this, cardIndex);
+    public handlePlayFaceDownCard(): void {
+        this.phase.handlePlayFaceDownCard(this);
     }
 
      public handleCardEffect(): void {
         this.phase.handleCardEffect(this);
+    }
+
+    public toPlayerPlayabilityPhase(): void {
+        this.transitionTo(Phases.playerPlayability);
+    }
+
+    public toPlayingPhase(): void {
+        this.transitionTo(Phases.playing)
+    }
+
+    public toCardEffectPhase(): void {
+        this.transitionTo(Phases.cardEffect)
+    }
+
+    public toEndPhase(): void {
+        this.transitionTo(Phases.end)
     }
 }

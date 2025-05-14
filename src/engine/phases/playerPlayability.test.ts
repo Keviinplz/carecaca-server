@@ -1,7 +1,6 @@
 import { GameContext } from "@engine/context";
 import { Table } from "@engine/models/table";
 import { Turn } from "@engine/models/turn";
-import { Phases } from "@engine/phases/registry";
 import { PlayerPlayabilityPhase } from "@engine/phases/playerPlayability";
 import { GameRules } from "@engine/models/rules";
 import { Player } from "@engine/models/player";
@@ -13,7 +12,8 @@ const mockCanPlayerPlayFromFaceDown = jest.fn();
 
 const mockGetCurrentPlayer = jest.fn();
 const mockCompleteTurn = jest.fn();
-const mockTransitionTo = jest.fn();
+const mockToPlayingPhase = jest.fn();
+const mockToEndPhase = jest.fn()
 const mockApplyPenalty = jest.fn();
 
 const mockPlayerWon = jest.fn();
@@ -38,7 +38,8 @@ const createMockContext = (): Partial<GameContext> => ({
         canPlayerPlayFromFaceDown: mockCanPlayerPlayFromFaceDown,
     } as Partial<GameRules> as GameRules,
     completeTurn: mockCompleteTurn,
-    transitionTo: mockTransitionTo,
+    toPlayingPhase: mockToPlayingPhase,
+    toEndPhase: mockToEndPhase,
     applyPenalty: mockApplyPenalty,
 });
 
@@ -48,15 +49,7 @@ describe('PlayerPlayabilityPhase', () => {
     let mockPlayer: Partial<Player>;
 
     beforeEach(() => {
-        mockIsGameStillPlayable.mockClear();
-        mockCanPlayerPlayFromHand.mockClear();
-        mockCanPlayerPlayFromFaceUp.mockClear();
-        mockCanPlayerPlayFromFaceDown.mockClear();
-        mockCompleteTurn.mockClear();
-        mockTransitionTo.mockClear();
-        mockApplyPenalty.mockClear();
-        mockPlayerWon.mockClear();
-        mockGetCurrentPlayer.mockClear();
+        jest.clearAllMocks();
 
         playerPlayabilityPhase = new PlayerPlayabilityPhase();
         mockCtx = createMockContext();
@@ -77,8 +70,7 @@ describe('PlayerPlayabilityPhase', () => {
         playerPlayabilityPhase.handlePlayerPlayability(mockCtx as GameContext);
 
         expect(mockIsGameStillPlayable).toHaveBeenCalledTimes(1);
-        expect(mockTransitionTo).toHaveBeenCalledTimes(1);
-        expect(mockTransitionTo).toHaveBeenCalledWith(Phases.end);
+        expect(mockToEndPhase).toHaveBeenCalledTimes(1);
 
         expect(mockGetCurrentPlayer).not.toHaveBeenCalled();
         expect(mockCompleteTurn).not.toHaveBeenCalled();
@@ -95,7 +87,8 @@ describe('PlayerPlayabilityPhase', () => {
         expect(mockPlayerWon).toHaveBeenCalledTimes(1);
         expect(mockCompleteTurn).toHaveBeenCalledTimes(1);
 
-        expect(mockTransitionTo).not.toHaveBeenCalled();
+        expect(mockToEndPhase).not.toHaveBeenCalled();
+        expect(mockToPlayingPhase).not.toHaveBeenCalled();
         expect(mockApplyPenalty).not.toHaveBeenCalled();
     });
 
@@ -112,8 +105,7 @@ describe('PlayerPlayabilityPhase', () => {
         expect(mockCanPlayerPlayFromHand).toHaveBeenCalledTimes(1);
         expect(mockCanPlayerPlayFromFaceUp).toHaveBeenCalledTimes(1);
         expect(mockCanPlayerPlayFromFaceDown).toHaveBeenCalledTimes(1);
-        expect(mockTransitionTo).toHaveBeenCalledTimes(1);
-        expect(mockTransitionTo).toHaveBeenCalledWith(Phases.playing);
+        expect(mockToPlayingPhase).toHaveBeenCalledTimes(1);
         expect(mockCompleteTurn).not.toHaveBeenCalled();
         expect(mockApplyPenalty).not.toHaveBeenCalled();
     });
@@ -131,8 +123,7 @@ describe('PlayerPlayabilityPhase', () => {
         expect(mockCanPlayerPlayFromHand).toHaveBeenCalledTimes(1);
         expect(mockCanPlayerPlayFromFaceUp).toHaveBeenCalledTimes(1);
         expect(mockCanPlayerPlayFromFaceDown).toHaveBeenCalledTimes(1);
-        expect(mockTransitionTo).toHaveBeenCalledTimes(1);
-        expect(mockTransitionTo).toHaveBeenCalledWith(Phases.playing);
+        expect(mockToPlayingPhase).toHaveBeenCalledTimes(1);
         expect(mockCompleteTurn).not.toHaveBeenCalled();
         expect(mockApplyPenalty).not.toHaveBeenCalled();
     });
@@ -150,8 +141,7 @@ describe('PlayerPlayabilityPhase', () => {
         expect(mockCanPlayerPlayFromHand).toHaveBeenCalledTimes(1);
         expect(mockCanPlayerPlayFromFaceUp).toHaveBeenCalledTimes(1);
         expect(mockCanPlayerPlayFromFaceDown).toHaveBeenCalledTimes(1);
-        expect(mockTransitionTo).toHaveBeenCalledTimes(1);
-        expect(mockTransitionTo).toHaveBeenCalledWith(Phases.playing);
+        expect(mockToPlayingPhase).toHaveBeenCalledTimes(1);
         expect(mockCompleteTurn).not.toHaveBeenCalled();
         expect(mockApplyPenalty).not.toHaveBeenCalled();
     });
@@ -173,22 +163,25 @@ describe('PlayerPlayabilityPhase', () => {
         expect(mockApplyPenalty).toHaveBeenCalledWith(mockPlayer);
         expect(mockCompleteTurn).toHaveBeenCalledTimes(1);
 
-        expect(mockTransitionTo).not.toHaveBeenCalled();
+        expect(mockToEndPhase).not.toHaveBeenCalled();
+        expect(mockToPlayingPhase).not.toHaveBeenCalled();
     });
 
 
     test('handlePlayedCard should do nothing', () => {
         expect(() => playerPlayabilityPhase.handlePlayedCard(mockCtx as GameContext, "A")).not.toThrow();
 
-        expect(mockTransitionTo).not.toHaveBeenCalled();
+        expect(mockToEndPhase).not.toHaveBeenCalled();
+        expect(mockToPlayingPhase).not.toHaveBeenCalled();
         expect(mockCompleteTurn).not.toHaveBeenCalled();
         expect(mockApplyPenalty).not.toHaveBeenCalled();
     });
 
     test('handlePlayFaceDownCard should do nothing', () => {
-        expect(() => playerPlayabilityPhase.handlePlayFaceDownCard(mockCtx as GameContext, 0)).not.toThrow();
+        expect(() => playerPlayabilityPhase.handlePlayFaceDownCard(mockCtx as GameContext)).not.toThrow();
 
-        expect(mockTransitionTo).not.toHaveBeenCalled();
+        expect(mockToEndPhase).not.toHaveBeenCalled();
+        expect(mockToPlayingPhase).not.toHaveBeenCalled();
         expect(mockCompleteTurn).not.toHaveBeenCalled();
         expect(mockApplyPenalty).not.toHaveBeenCalled();
     });
@@ -196,7 +189,8 @@ describe('PlayerPlayabilityPhase', () => {
     test('handleCardEffect should do nothing', () => {
         expect(() => playerPlayabilityPhase.handleCardEffect(mockCtx as GameContext)).not.toThrow();
 
-        expect(mockTransitionTo).not.toHaveBeenCalled();
+        expect(mockToEndPhase).not.toHaveBeenCalled();
+        expect(mockToPlayingPhase).not.toHaveBeenCalled();
         expect(mockCompleteTurn).not.toHaveBeenCalled();
         expect(mockApplyPenalty).not.toHaveBeenCalled();
     });

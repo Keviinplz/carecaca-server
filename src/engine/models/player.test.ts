@@ -118,25 +118,25 @@ describe('Player', () => {
         expect(player.faceUpCards).toHaveLength(0)
     })
 
-    test('Removes card from faceDown using indexes', () => {
-        const player = new Player("Kevin", [new Card("3")], [new Card("5")], [new Card("7"), new Card("Joker")])
+    test('Removes card from faceDown', () => {
+        const player = new Player("Kevin", [new Card("3")], [new Card("5")], [new Card("Joker")])
 
         expect(player.hand).toHaveLength(1)
         expect(player.faceUpCards).toHaveLength(1)
-        expect(player.faceDownCards).toHaveLength(2)
+        expect(player.faceDownCards).toHaveLength(1)
 
-        const cardSecret = player.removeFaceDownCardByIndex(0)
-        const undefinedCard = player.removeFaceDownCardByIndex(3)
+        const cardSecret = player.removeFaceDownCard()
+        const undefinedCard = player.removeFaceDownCard()
 
         expect(undefinedCard).toBeUndefined()
 
         expect(cardSecret).toBeInstanceOf(Card)
-        expect(cardSecret!.value).toBe("7")
+        expect(cardSecret!.value).toBe("Joker")
         
         
         expect(player.hand).toHaveLength(1)
         expect(player.faceUpCards).toHaveLength(1)
-        expect(player.faceDownCards).toHaveLength(1)
+        expect(player.faceDownCards).toHaveLength(0)
     })
 
 })

@@ -89,7 +89,7 @@ describe('CardEffectPhase', () => {
     });
 
      test('handlePlayFaceDownCard should do nothing', () => {
-         cardEffectPhase.handlePlayFaceDownCard(mockCtx as GameContext, 0);
+         cardEffectPhase.handlePlayFaceDownCard(mockCtx as GameContext);
          expect(mockCompleteTurn).not.toHaveBeenCalled();
     });
 });
